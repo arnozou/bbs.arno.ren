@@ -180,7 +180,8 @@ return [
 
         Mnabialek\LaravelSqlLogger\Providers\ServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        Dingo\Api\Provider\LaravelServiceProvider::class
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
     ],
 
     /*

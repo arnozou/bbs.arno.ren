@@ -2,14 +2,13 @@
 
 namespace App;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 use App\User;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use Notifiable;
+    use HasRolesAndAbilities;
     
     /**
      * The attributes that are mass assignable.

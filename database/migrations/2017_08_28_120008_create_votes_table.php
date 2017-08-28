@@ -14,7 +14,7 @@ class CreateVotesTable extends Migration
     public function up()
     {
         Schema::create('votes', function(Blueprint $table) {
-            $table->increment('id');
+            $table->increments('id');
             $table->integer('user_id')->unsigend();
             $table->integer('votable_id')->unsigned();
             $table->boolean('vote_type')->comment('1赞0踩');
@@ -30,6 +30,6 @@ class CreateVotesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('votes');
     }
 }

@@ -14,7 +14,7 @@ class CreateRepliesTable extends Migration
     public function up()
     {
         Schema::create('replies', function(Blueprint $table) {
-            $table->increment('id');
+            $table->increments('id');
             $table->integer('topic_id')->unsigned()->comment('主题ID');
             $table->integer('user_id')->unsigned();
             $table->integer('vote_count');

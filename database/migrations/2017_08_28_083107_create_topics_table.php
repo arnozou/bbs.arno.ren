@@ -14,7 +14,7 @@ class CreateTopicsTable extends Migration
     public function up()
     {
         Schema::create('topics', function(Blueprint $table) {
-            $table->increment('id')->comment('主题帖ID');
+            $table->increments('id')->comment('主题帖ID');
             $table->integer('category_id')->comment('板块ID');
             $table->string('title', 200)->comment('主题标题');
             $table->text('body');
