@@ -31,7 +31,7 @@ class CaptchaController extends ApiController
       $response = $sms->sendSms(
           "arno邹", // 短信签名
           "SMS_89085006", // 短信模板编号
-          "13424463876", // 短信接收者
+          $mobile, // 短信接收者
           Array(  // 短信模板中字段的值
               "code"=>$code,
               // "product"=>"dsd"
