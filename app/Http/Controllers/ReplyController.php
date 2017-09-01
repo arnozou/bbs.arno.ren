@@ -94,7 +94,8 @@ class ReplyController extends ApiController
     }
   }
 
-  public function delete(Request $request, $replyId)
+
+  public function destory(Request $request, $replyId)
   {
     $reply = $this->replyR->find($replyId);
 

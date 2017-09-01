@@ -38,10 +38,7 @@ $api->version(['0.1.0'], function($api) {
 
   // Restful api
   $api->get('/categories', 'App\Http\Controllers\CategoryController@index');
-  $api->post('/categories', 'App\Http\Controllers\CategoryController@store');
   $api->get('/categories/:category_id', 'App\Http\Controllers\CategoryController@show');
-  $api->match(['put', 'patch'], '/categories/category_id', 'App\Http\Controllers\CategoryController@update');
-  $api->delete('/categories/:category_id', 'App\Http\Controllers\CategoryController@destory');
 
   $api->get('/topics', 'App\Http\Controllers\TopicController@index');
   $api->get('/topics/{topic_id}', 'App\Http\Controllers\TopicController@show');
@@ -51,18 +48,26 @@ $api->version(['0.1.0'], function($api) {
 });
 
 $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
-  $api->get('users/{id}', 'App\Http\Controllers\UserController@show');
+  $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
+  $api->patch('/users', 'App\Http\Controllers\UserController@update');
+  $api->patch('/users/password', 'App\Http\Controllers\UserController@updatePassword');
+  // $api->get('/users/edit_avatar', 'App\Http\Controllers\UserController@edit_avatar');
+  $api->patch('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
 
+  $api->post('/categories', 'App\Http\Controllers\CategoryController@store');
+  $api->patch('/categories/category_id', 'App\Http\Controllers\CategoryController@update');
+  $api->delete('/categories/:category_id', 'App\Http\Controllers\CategoryController@destory');
+  
   $api->post('/topics', 'App\Http\Controllers\TopicController@store');
   $api->post('/topics/{topic_id}/vote', 'App\Http\Controllers\TopicController@vote');
   $api->delete('/topics/{topic_id}/vote', 'App\Http\Controllers\TopicController@unvote');
-  $api->match(['put', 'patch'], '/topic/:topic_id', 'App\Http\Controllers\TopicController@update');
+  $api->patch('/topic/:topic_id', 'App\Http\Controllers\TopicController@update');
   $api->delete('/topic/{topic_id}', 'App\Http\Controllers\TopicController@destory');
 
   $api->get('/topics/replies/{reply_id}/edit', 'App\Http\Controllers\ReplyController@edit');
   $api->post('/topics/{topic_id}/replies', 'App\Http\Controllers\ReplyController@store');
-  $api->match(['put', 'patch'], '/topics/replies/{reply_id}', 'App\Http\Controllers\ReplyController@update');
-  $api->delete('/topics/replies/{reply_id}', 'App\Http\Controllers\ReplyController@delete');
+  $api->patch('/topics/replies/{reply_id}', 'App\Http\Controllers\ReplyController@update');
+  $api->delete('/topics/replies/{reply_id}', 'App\Http\Controllers\ReplyController@destory');
   $api->post('/topics/replies/{reply_id}/vote', 'App\Http\Controllers\ReplyController@vote');
   $api->delete('/topics/replies/{reply_id}/vote', 'App\Http\Controllers\ReplyController@unvote');
 });
