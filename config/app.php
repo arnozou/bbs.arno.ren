@@ -182,6 +182,8 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Silber\Bouncer\BouncerServiceProvider::class,
+        Mews\Purifier\PurifierServiceProvider::class,
+        Parsedown\Providers\ParsedownServiceProvider::class,
     ],
 
     /*
@@ -232,6 +234,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
+
     ],
 
 ];

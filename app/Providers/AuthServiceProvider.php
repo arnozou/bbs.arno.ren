@@ -25,6 +25,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('edit-topic', function ($user, $topic) {
+            Logger('调用gates edit-topic\n');
+            return $user->id == $topic->user_id;
+        });
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\ApiController;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Dingo\Api\Exception\ValidationHttpException;
 use App\Repositories\Interfaces\UserInterface;
 use App\Repositories\Interfaces\AuthcodeInterface;
@@ -12,7 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EmailLogin;
 use App\User;
 use Auth;
-
+use App\Http\Controllers\Traits\DingoValidateTrait;
 // use Validator;
 
 class LoginController extends ApiController
@@ -28,8 +27,7 @@ class LoginController extends ApiController
     |
     */
 
-    use AuthenticatesUsers;
-
+    use DingoValidateTrait;
     /**
      * Where to redirect users after login.
      *
@@ -62,14 +60,10 @@ class LoginController extends ApiController
 
     public function mobile(Request $request, AuthcodeInterface $authcodeRepository)
     {
-        $validator = $this->getValidationFactory()->make($request->all(), [
-            'mobile'    => 'required|numeric',
-            'code'      => 'required|numeric'
+        $this->validate($request->all(), [
+            'mobile'    => 'required|integer',
+            'code'      => 'required|integer'
             ]);
-
-        if ($validator->fails()) {
-            throw new ValidationHttpException($validator->errors());
-        }
 
         $mobile = $request->input('mobile');
         $code = $request->input('code');

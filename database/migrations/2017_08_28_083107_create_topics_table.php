@@ -18,6 +18,7 @@ class CreateTopicsTable extends Migration
             $table->integer('category_id')->comment('板块ID');
             $table->string('title', 200)->comment('主题标题');
             $table->text('body');
+            $table->text('body_original');
             $table->integer('user_id')->comment('用户ID');
             $table->integer('reply_count')->unsigned()->default(0);
             $table->integer('vote_count')->default(0);

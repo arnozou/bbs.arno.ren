@@ -3,11 +3,11 @@
 namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
-
-use App\User;
-
-class User extends Model
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class User extends Authenticatable
 {
+    use Notifiable;
     use HasRolesAndAbilities;
     
     /**
