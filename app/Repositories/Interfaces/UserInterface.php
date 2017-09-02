@@ -2,11 +2,9 @@
 
 Interface UserInterface
 {
-  public function findById($id);
-
    public function findOrCreateWithMobile($mobile);
 
-   public function findByEmail($email);
+   public function createWithInfo($datas);
 
-   public function CreateWithEmail($email, $password);
+   // public function resetPassword();
 }

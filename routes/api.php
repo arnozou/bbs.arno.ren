@@ -30,18 +30,22 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version(['0.1.0'], function($api) {
   $api->post('/login/wechat', 'App\Http\Controllers\Auth\LoginController@wechat');
   $api->post('/login/mobile', 'App\Http\Controllers\Auth\LoginController@mobile');
-  $api->post('/login/email', 'App\Http\Controllers\Auth\LoginController@email');
-  $api->post('/register', 'App\Http\Controllers\Auth\RegisterController@register');
+  $api->post('/login', 'App\Http\Controllers\Auth\LoginController@login');
+  $api->post('/register', 'App\Http\Controllers\UserController@store');
   $api->post('/test', 'App\Http\Controllers\TestController@test');
   $api->post('/captcha/send/mobile', //['middleware' => 'api.throttle'],
     'App\Http\Controllers\Auth\CaptchaController@sendToMobile');
 
   // Restful api
+
+  
+
   $api->get('/categories', 'App\Http\Controllers\CategoryController@index');
   $api->get('/categories/:category_id', 'App\Http\Controllers\CategoryController@show');
 
   $api->get('/topics', 'App\Http\Controllers\TopicController@index');
   $api->get('/topics/{topic_id}', 'App\Http\Controllers\TopicController@show');
+  // $api->post('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
 
   $api->get('/topics/{topic_id}/replies', 'App\Http\Controllers\ReplyController@index');
 
@@ -49,10 +53,11 @@ $api->version(['0.1.0'], function($api) {
 
 $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
   $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
+  $api->get('/users/test', 'App\Http\Controllers\UserController@edit1');
   $api->patch('/users', 'App\Http\Controllers\UserController@update');
   $api->patch('/users/password', 'App\Http\Controllers\UserController@updatePassword');
   // $api->get('/users/edit_avatar', 'App\Http\Controllers\UserController@edit_avatar');
-  $api->patch('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
+  $api->post('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
 
   $api->post('/categories', 'App\Http\Controllers\CategoryController@store');
   $api->patch('/categories/category_id', 'App\Http\Controllers\CategoryController@update');
@@ -70,4 +75,8 @@ $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
   $api->delete('/topics/replies/{reply_id}', 'App\Http\Controllers\ReplyController@destory');
   $api->post('/topics/replies/{reply_id}/vote', 'App\Http\Controllers\ReplyController@vote');
   $api->delete('/topics/replies/{reply_id}/vote', 'App\Http\Controllers\ReplyController@unvote');
+});
+
+$api->version(['0.1.0'], function($api) {
+  $api->get('/users/{id}', 'App\Http\Controllers\UserController@show');
 });

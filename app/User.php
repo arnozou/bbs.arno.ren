@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'mobile', 'email', 'password',
+        'mobile', 'email'
     ];
 
     /**
@@ -32,4 +32,5 @@ class User extends Authenticatable
     {
        return $this->hasOne(UserInfo::class, 'user_id', 'id');
     }
+
 }

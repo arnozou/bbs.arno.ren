@@ -3,113 +3,172 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Repositories\Interfaces\UserInterface;
+use App\Transformers\UserTransformer;
+use App\Transformers\UserEditTransformer;
 use Mail;
 use Auth;
 
 class UserController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+  use Traits\DingoValidateTrait;
+
+  public function __construct(UserInterface $userRepository)
+  {
+    $this->userR = $userRepository;
+  }
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index()
+  {
+      //
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create()
+  {
+      
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request)
+  {
+    $this->validate($request->all(), [
+      'mobile'            => 'required_without:email|integer',
+      'email'             => 'required_without:mobile|email',
+      'nick_name'         => 'required',
+      'password'          => 'required|string|min:6|confirmed',
+      // 'password_confirmation'  => 'same:password',
+      'real_name'         => 'nullable|string|realname|unique:user_infos',
+      'gender'            => 'required|between:0,1',
+      'age'               => 'nullable|between:0,150',
+      'qq'                => 'nullable|digits_between:8,11',
+      'intro'             => 'nullable|string',
+      ]);
+    $datas = collect($request->all())->reject(function ($value) {
+        return empty($value);
+      });
+    $user = $this->userR->createWithInfo($datas->toArray());
+
+    if ($user) {
+      return $this->response->item($user, new UserTransformer());
+    } else {
+      return $this->response->errorInternal();
+    }
+  }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function show2($id)
+  {
+      $user = $this->user;
+      if (Auth::check()) {
+          echo 'checked';
+      } else {
+          echo 'unchecked';
+      }
+      return response($user);
+  }
+
+  public function show($id)
+  {
+    $user = $this->userR->with('info')->find($id);
+      return $this->response->item($user, new UserTransformer());
+
+    if ($user) {
+      return $this->response->item($user, new UserTransformer());
+    } else {
+      return $this->response->errorInternal();
+    }
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function edit()
+  {
+    $this->user()->load('info');
+
+    return $this->response->item($this->user(), new UserEditTransformer());
+  }
+
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request, $id)
+  {
+    $this->validate($request->all(), [
+      'mobile'            => 'required_without:email|integer',
+      'email'             => 'required_without:mobile|email',
+      'nick_name'         => 'required|unique:user_infos',
+      'real_name'         => 'present',
+      'gender'            => 'required|between:0,1',
+      'birthday'          => 'present|date',
+      'age'               => 'present|between:0,150',
+      'qq'                => 'present|digits_between:6,11',
+      'intro'             => 'present|string',
+      ]);
+
+    
+    $this->user()->fill($request->all());
+    $this->user()->info->fill($request->all());
+
+    if ($this->user()->save()) {
+      return $this->response->accepted(null, '更改已生效');
+    } else {
+      return $this->response->errorInternal();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+  }
+
+  public function updatePassword(Request $request)
+  {
+
+  }
+  public function updateAvatar(Request $request)
+  {
+
+    if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+      $path = $request->file('avatar')->store('avatars');
+      $this->user()->info->avatar_url = $path;
+      $this->user()->push();
+
+      return $this->response->accepted(null, ['url' => url($path)]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $user = $this->user;
-        if (Auth::check()) {
-            echo 'checked';
-        } else {
-            echo 'unchecked';
-        }
-        return response($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit()
-    {
-        $email ='970815705@qq.com';
-        $name = 'arnozou';
-        $uid = '1';
-        // config(['mail.password' => 'aa']);
-        // config(['app.debug' => false]);
-        $code = '1876536';
-        print_r(config('mail'));
-        // print_r($_ENV);
-        // exit;
-        $data = ['email'=>$email, 'name'=>$name, 'uid'=>$uid, 'activationcode'=>$code];
-        $flag = Mail::send('activemail', $data, function($message) use($data)
-        {
-            $message->to($data['email'])->subject('欢迎注册我们的网站，请激活您的账号！');
-        });
-
-        if ($flag) {
-            echo '发送成功';
-        } else {
-            echo '发送失败';
-        }
-
-        var_dump($flag);
-        // exit;
-        return response($flag);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    return $this->response->errorInternal(); 
+  }
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+      //
+  }
 }

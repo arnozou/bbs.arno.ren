@@ -44,7 +44,7 @@ abstract class Repository implements RepositoryInterface {
 
   public function rules()
   {
-    return null;
+    return [];
   }
 
   public function makeRules()
@@ -52,7 +52,7 @@ abstract class Repository implements RepositoryInterface {
     if (is_array($this->rules())) {
       $this->rules = $this->rules();
     } else {
-      throw new Exception('rules must return an array');
+      throw new \Exception('rules must return an array');
     }
   }
 

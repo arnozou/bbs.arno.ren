@@ -79,6 +79,16 @@ class LoginController extends ApiController
         
     }
 
+    public function login(Request $request)
+    {
+        $datas = $request->all();
+
+        if (Auth::once(['email' => $datas['email'], 'password' => $datas['password']])) {
+            return $this->response->item(Auth::getLastAttempted(), new \App\Transformers\LoginTransformer());
+        } else {
+            return $this->response->errorForbidden('用户名和密码不匹配');
+        }
+    }
     public function email(EmailLogin $request)
     {
         $datas = $request->all();

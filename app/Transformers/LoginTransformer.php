@@ -4,7 +4,6 @@ namespace App\Transformers;
 use App\User;
 use JWTAuth;
 
-
 class LoginTransformer extends BaseTransformer {
 
   public function transform(User $user)
