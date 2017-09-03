@@ -86,6 +86,7 @@ class LoginController extends ApiController
             'mobile'    => 'required_without:email|integer',
             'password'  => 'required'
             ]);
+        
         $data = $request->intersect(['email', 'mobile', 'password']);
         if (Auth::once($data)) {
             return $this->response->item(Auth::getLastAttempted(), new \App\Transformers\LoginTransformer());

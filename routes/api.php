@@ -41,7 +41,8 @@ $api->version(['0.1.0'], function($api) {
   
 
   $api->get('/categories', 'App\Http\Controllers\CategoryController@index');
-  $api->get('/categories/:category_id', 'App\Http\Controllers\CategoryController@show');
+  $api->get('/categories/{category_id}', 'App\Http\Controllers\CategoryController@show');
+  $api->get('/categories/{category_id}/topics', 'App\Http\Controllers\TopicController@index');
 
   $api->get('/topics', 'App\Http\Controllers\TopicController@index');
   $api->get('/topics/{topic_id}', 'App\Http\Controllers\TopicController@show');
@@ -60,13 +61,14 @@ $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
   $api->post('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
 
   $api->post('/categories', 'App\Http\Controllers\CategoryController@store');
-  $api->patch('/categories/category_id', 'App\Http\Controllers\CategoryController@update');
-  $api->delete('/categories/:category_id', 'App\Http\Controllers\CategoryController@destory');
-  
+  $api->patch('/categories/{category_id}', 'App\Http\Controllers\CategoryController@update');
+  $api->delete('/categories/{category_id}', 'App\Http\Controllers\CategoryController@destory');
+  $api->post('/categories/{category_id}/topics', 'App\Http\Controllers\TopicController@store');
+
   $api->post('/topics', 'App\Http\Controllers\TopicController@store');
   $api->post('/topics/{topic_id}/vote', 'App\Http\Controllers\TopicController@vote');
-  $api->delete('/topics/{topic_id}/vote', 'App\Http\Controllers\TopicController@unvote');
-  $api->patch('/topic/:topic_id', 'App\Http\Controllers\TopicController@update');
+  $api->delete('/topics/{topic_id}/vote{category_id}', 'App\Http\Controllers\TopicController@unvote');
+  $api->patch('/topic/{topic_id}', 'App\Http\Controllers\TopicController@update');
   $api->delete('/topic/{topic_id}', 'App\Http\Controllers\TopicController@destory');
 
   $api->get('/topics/replies/{reply_id}/edit', 'App\Http\Controllers\ReplyController@edit');

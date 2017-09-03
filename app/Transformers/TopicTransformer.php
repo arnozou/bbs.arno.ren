@@ -13,7 +13,7 @@ class TopicTransformer extends BaseTransformer {
       'id'                  => $model->id,
       'title'               => $model->title,
       'body'                => $model->body,
-      'creater'             => $this->userTrans($model->user),
+      'creator'             => $this->userTrans($model->user),
       'reply_count'         => $model->reply_count,
       'vote_count'          => $model->vote_count,
       'read_count'          => $model->read_count,

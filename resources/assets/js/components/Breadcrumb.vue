@@ -2,9 +2,8 @@
    <ol class="breadcrumb">
     <li><router-link to='/'>Home</router-link></li>
     <li v-for="(item, index) in paths">
-      <router-link to='item' v-text="paths[1]"></router-link>
+      <router-link :to="'/' + item" v-text="paths[index]"></router-link>
     </li>
-    <li class="active">Data</li>
   </ol>
 </template>
 
@@ -24,6 +23,10 @@
       fetchRoute() {
         console.log(this.$route);
         this.paths = this.$route.path.split('/');
+        if (this.paths[0] == '') {
+          this.paths.shift();
+        }
+        
       }
     },
     computed: {

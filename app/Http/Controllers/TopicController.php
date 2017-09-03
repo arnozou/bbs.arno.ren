@@ -9,13 +9,20 @@ use Bouncer;
 
 class TopicController extends ApiController
 {
+
+  use Traits\DingoValidateTrait;
+
   public function __construct(TopicInterface $topicRepository)
   {
     $this->topicR = $topicRepository;
   }
 
-  public function index(Request $request)
+  public function index(Request $request, $categoryId = 0)
   {
+    $categoryId = $request->input('category_id', $categoryId);
+    if ((int)$categoryId === 0) {
+      return $this->response->noContent();
+    }
     $inputs = $request->intersect(['before', 'after', 'pageSize']);
     // 验证
     $pageSize = $request->input('pageSize', 5);
@@ -29,15 +36,22 @@ class TopicController extends ApiController
         $this->topicR->orderBy('updated_at', 'desc');
       }
     }
+    $where[] = ['category_id', '=', $categoryId];
     $topics = $this->topicR->with('user.info')->limit($pageSize)->findWhere($where);
 
     return $this->response->collection($topics, new TopicTransformer());
   }
 
-  public function store(Request $request)
+  public function store(Request $request, $categoryId = 0)
   {
-    $datas = $request->only(['title', 'body', 'category_id']);
+    $datas = $request->only(['title', 'body']);
+    $datas['category_id'] = $request->input('category_id', $categoryId);
     $this->topicR->validate($datas);
+    $this->validate($datas, [
+      'title'       => 'required|string|max:255',
+      'body'        => 'required',
+      'category_id' => 'required|integer|min:1'
+      ]);
     $this->topicR->filterString($datas['title']);
     $this->topicR->fillUser($this->auth->user()->id);
     $topic = $this->topicR->create($datas);

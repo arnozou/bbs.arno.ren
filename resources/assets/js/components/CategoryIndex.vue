@@ -1,19 +1,24 @@
 <template>
-  <categories :categories="categories"></categories>
+  <div>
+    <categories :categories="categories"></categories>
+    <topics :topics="topics"></topics>
+  </div>
 </template>
 
 <script>
 
   import Categories from './Categories.vue'
+  import Topics from './Topics.vue'
 
   export default {
     data() {
       return {
        categories:[], 
+       topics:[],
+       // category: 0,
+       category: 1,
       }
     },
-    computed:{
-    },  
     watch: {
       $route() {
         console.log('路由改变');
@@ -28,12 +33,21 @@
       }).catch((error) => {
         console.log('error get categories')
       })
+
+
+      axios.get('categories/'+ this.category +'/topics').then((response) => {
+        this.topics = response.data.data
+        console.log('data topics', response.data);
+      }).catch((error) => {
+        console.log('error get topics list');
+      })
     },
     mounted() {
       console.log('mounted');
     },
     components:{
-      categories:Categories
+      categories:Categories,
+      topics:Topics
     }
   }
 </script>

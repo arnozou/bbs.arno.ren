@@ -8,7 +8,7 @@
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li><router-link to="/example"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></router-link></li>
+          <li><router-link to="/categories"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></router-link></li>
           <li><a href=""><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span></a></li>
           <li><a href=""><span class="glyphicon glyphicon-tags" aria-hidden="true"></span></a></li>
           <li><a href=""><span class="glyphicon glyphicon-fire" aria-hidden="true"></span></a></li>

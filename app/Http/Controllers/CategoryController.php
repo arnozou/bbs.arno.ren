@@ -8,13 +8,21 @@ use App\Transformers\CategoryTransformer;
 
 class CategoryController extends ApiController
 {
-    public function index(Request $request, CategoryInterface $categoryRepository)
-    {
-      return $this->response->collection($categoryRepository->getChildren(0), new CategoryTransformer());
-    }
+  public function __construct(CategoryInterface $categoryRepository)
+  {
+    $this->categoryR = $categoryRepository;
+  }
+  public function index(Request $request)
+  {
+    return $this->response->collection($this->categoryR->getChildren(0), new CategoryTransformer());
+  }
 
-    public function store()
-    {
-      
-    }
+  public function store(Request $request)
+  {
+  }
+
+  public function show(Request $request, $categoryId)
+  {
+    return $this->response->item($this->categoryR->getChildren($categoryId), new CategoryTransformer());
+  }  
 }
