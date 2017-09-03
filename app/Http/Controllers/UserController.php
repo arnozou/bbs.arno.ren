@@ -154,10 +154,11 @@ class UserController extends ApiController
 
     if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
       $path = $request->file('avatar')->store('avatars');
+      $path = \Storage::url($path);
       $this->user()->info->avatar_url = $path;
       $this->user()->push();
 
-      return $this->response->accepted(null, ['url' => url($path)]);
+      return $this->response->accepted(null, ['url' => $path]);
     }
     return $this->response->errorInternal(); 
   }

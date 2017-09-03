@@ -194,4 +194,11 @@
     font-size: 12px;
     line-height: 14px;
   }
+  .user-icon{
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    line-height: 46px;
+    font-size: 2.4rem;
+  }
 </style>
