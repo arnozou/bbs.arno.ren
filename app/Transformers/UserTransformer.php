@@ -13,9 +13,11 @@ class UserTransformer extends BaseTransformer {
       'nick_name'     => $model->info->nick_name,
       // 'real_name'     => $model->info->real_name,
       'email'         => $model->email,
+      'gender'        => $model->info->gender,
       'qq'            => $model->info->qq,
       'intro'         => $model->info->intro,
       'avatar_url'    => $model->info->avatar_url,
+      'created_at'    => $model->created_at,
       // 'posts'      => 
     ];
   }

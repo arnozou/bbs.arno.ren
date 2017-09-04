@@ -67,7 +67,7 @@ $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
 
   $api->post('/topics', 'App\Http\Controllers\TopicController@store');
   $api->post('/topics/{topic_id}/vote', 'App\Http\Controllers\TopicController@vote');
-  $api->delete('/topics/{topic_id}/vote{category_id}', 'App\Http\Controllers\TopicController@unvote');
+  $api->delete('/topics/{topic_id}/vote', 'App\Http\Controllers\TopicController@unvote');
   $api->patch('/topic/{topic_id}', 'App\Http\Controllers\TopicController@update');
   $api->delete('/topic/{topic_id}', 'App\Http\Controllers\TopicController@destory');
 

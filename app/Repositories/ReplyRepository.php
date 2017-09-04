@@ -1,7 +1,8 @@
 <?php namespace App\Repositories;
 
 use App\Repositories\Interfaces\ReplyInterface;
-
+use App\Vote;
+use Illuminate\Database\Eloquent\Collection;
 
 class ReplyRepository extends Repository implements ReplyInterface {
 
@@ -33,7 +34,7 @@ class ReplyRepository extends Repository implements ReplyInterface {
   {
     $model = $this->model->find($replyId);
     if ($model) {
-      $vote = \App\Vote::where('votable_type', 'reply')->where('votable_id', $replyId)->where('user_id', $userId)->first();
+      $vote = Vote::where('votable_type', 'reply')->where('votable_id', $replyId)->where('user_id', $userId)->first();
       if ($vote) {
         if (!$vote->vote_type) {
           $vote->vote_type = 1;
@@ -42,7 +43,7 @@ class ReplyRepository extends Repository implements ReplyInterface {
           return ['vote_count' => $model->vote_count];
         }
       } else {
-        $vote = \App\Vote::create([
+        $vote = Vote::create([
           'user_id'      => $userId,
           'votable_type' => 'reply',
           'votable_id'   => $replyId,
@@ -62,7 +63,7 @@ class ReplyRepository extends Repository implements ReplyInterface {
   {
     $model = $this->model->find($replyId);
     if ($model) {
-      $vote = \App\Vote::where('votable_type', 'reply')->where('votable_id', $replyId)->where('user_id', $userId)->first();
+      $vote = Vote::where('votable_type', 'reply')->where('votable_id', $replyId)->where('user_id', $userId)->first();
       if ($vote && $vote->vote_type) {
         $vote->vote_type = 0;
         $vote->save();
@@ -72,5 +73,34 @@ class ReplyRepository extends Repository implements ReplyInterface {
     }
 
     return false;
+  }
+
+  public function areVotedBy(Collection $replies, $userId)
+  {
+    $ids = [];
+    foreach ($replies as $reply) {
+      $ids[] = $reply->id;
+    }
+
+    $votes = Vote::where('user_id', '=', $userId)
+      // ->join('votes', 'replies.id', '=', 'votes.votable_id');
+      ->whereIn('votable_id', $ids)
+      ->where('votable_type', '=', 'reply')
+      ->get();
+
+    $voteData = [null];
+    foreach ($votes as $vote) {
+      $voteData[] = $vote->votable_id;
+    }
+
+    foreach ($replies as $reply) {
+      if(array_search($reply->id, $voteData)) {
+        $reply->is_voted = true;
+      } else {
+        $reply->is_voted = false;
+      }
+    }
+
+    return $replies;
   }
 }

@@ -1,20 +1,32 @@
 <template>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4 col-md-offset-4 ">
       <div class="login-block">
         <form class="form-horizontal" role="form" action="post">
 
-          <div class="form-group">
-            <label class="col-lg-2 control-label"  for="username">手机/邮箱</label>
-            <div class="input-group">
-              <input id="username" class="form-control col-lg-10" type="text" name="username" v-model="username" placeholder="手机/邮箱">
-              <span class="input-group-addon">{{usernameState}}</span>
-            </div>
+          <div class="form-group" v-show="loginType == 'username'">
+            <label class="control-label"  for="username">手机/邮箱</label>
+            <input id="username" class="form-control" type="text" name="username" v-model="username" placeholder="手机/邮箱">
+            <!-- <div class="input-group">
+            </div> -->
+            <span class="help-text">{{usernameState}}</span>
           </div>
 
-          <div class="form-group" v-show="usernameType == 'mobile'">
-            <label class="col-lg-2 control-label"  for="mobile_code">手机验证码免注册登录</label>
-            <div class="input-group col-lg-9">
+          <div class="form-group" v-show="loginType == 'username'">
+            <label class="control-label"  for="password">密码</label>
+            <input id="password" class="form-control" type="password" name="password" v-model="password" placeholder="密码">
+          </div>
+
+          <div class="form-group" v-show="loginType == 'mobile'">
+            <label class="control-label"  for="mobile">手机</label>
+            <input id="mobile" class="form-control" type="number" name="mobile" v-model="username" placeholder="手机">
+            <!-- <div class="input-group">
+            </div> -->
+            <span class="help-text">{{mobileState}}</span>
+          </div>
+          <div class="form-group" v-show="loginType == 'mobile'">
+            <label class="control-label"  for="mobile_code">验证码</label>
+            <div class="input-group">
               <input id="mobile_code" class="form-control " type="password" name="mobile_code" v-model="mobileCode" placeholder="验证码">
               <span class="input-group-btn">
                 <button  role="button" class="btn " :class="{disabled: mobile.leftSeconds}" @click.prevent="sendMobile" v-text="sendMobileTxt"></button>
@@ -23,14 +35,13 @@
             </div>
             
           </div>
-          <div class="form-group" v-show="usernameType == 'email'">
-            <label class="col-lg-2 control-label"  for="password">密码</label>
-            <input id="password" class="form-control col-lg-10" type="password" name="password" v-model="password" placeholder="密码">
-          </div>
+          
           <div class="form-group ">
-            <div class="col-lg-offset-2 col-lg-10">
-              <button class="btn btn-primary btn-lg" :class="{disabled: !usernameType}" @click.prevent="login">登录</button>
+            <div class="">
+              <button class="btn btn-primary" :class="{disabled: !usernameType}" @click.prevent="login">登录</button>
               <span>没有账号？<router-link to="/register">注册</router-link></span>
+              <a v-show="loginType == 'username'" @click="loginType = 'mobile'">手机验证码登录</a>
+              <a v-show="loginType == 'mobile'" @click="loginType = 'username'">密码登录</a>
               <router-link to="/reset">忘记密码</router-link>
             </div>
           </div>
@@ -49,13 +60,15 @@
       return {
         username:'',
         password:'',
+        loginType:'username',
         usernameIsDirty:false,
         isCalculating:false,
         mobileCode:'',
         mobile:{
           timer:0,
           leftSeconds:0,
-        }
+        },
+        error:'',
       }
     },
     computed:{
@@ -96,23 +109,18 @@
     },
     methods: {
       login() {
+        if (this.loginType == 'mobile') {
+          this.loginMobile()
+          return;
+        }
         if (!this.usernameType) {
           return 
         }
 
         let data = {password:this.password}
         data[this.usernameType] = this.username
-        data.code = this.mobileCode
-        data.password = this.password
-        axios.post('login/' + this.usernameType, data,{
-          baseURL:'https://bbs.arno.ren/api/',
-          auth:this.$store.state.token,
-
-        }).then((response) => {
-          this.$store.commit('login', {
-            nickname:response.data.data.nick_name,
-            token:response.data.data.token
-          });
+        axios.post('login/', data).then((response) => {
+          this.$store.commit('login', response.data.data);
           this.$router.push('/home');
 
         }).catch(function(error) {
@@ -129,9 +137,6 @@
             });
       },
       expensiveOperation() {
-       _.debounce(function(){
-        console.log('in debounce');
-       }, 150)
       },
       sendMobile() {
         window._.debounce(function(){
@@ -161,14 +166,20 @@
         }).catch((error) => {
           console.log('发送失败');
         })
+      },
+      loginMobile() {
+        axios.post('login/mobile', {
+          mobile:this.username,
+          code:mobileCode
+        }).then((response) => {
+          this.$store.commit('login', response.data.data);
+          this.$router.push('/home');
+        }).catch(function(error) {
+          if (error.response.status == 403) {
+            this.error = error.response.data.message
+          }
+        })
       }
-      /*expensiveOperation: _.debounce(function () {
-        this.isCalculating = true
-        setTimeout(function () {
-          this.isCalculating = false
-          this.usernameIsDirty = false
-        }.bind(this), 1000)
-      }, 500)*/
     }
   }
 </script>

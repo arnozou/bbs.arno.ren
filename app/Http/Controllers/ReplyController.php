@@ -24,6 +24,9 @@ class ReplyController extends ApiController
     $this->replyR->updatePaginate($request->input('limit', 10),
       $request->input('after'), $request->input('before'));
     $replies = $this->replyR->findByField('topic_id', $topicId);
+    if (\JWTAuth::getToken() && ($user = \JWTAuth::authenticate())) {
+      $replies = $this->replyR->areVotedBy($replies, $user->id);
+    }
     
     $replies->load('user.info');
     return $this->response->collection($replies, new ReplyTransformer());
@@ -121,8 +124,8 @@ class ReplyController extends ApiController
 
   public function unvote($replyId)
   {
-    if ($this->replyR->unvote($replyId, $this->user()->id)) {
-      return $this->response->accepted();
+    if ($res = $this->replyR->unvote($replyId, $this->user()->id)) {
+      return $this->response->accepted(null, $res);
     } else {
       return $this->response->errorForbidden();
     }

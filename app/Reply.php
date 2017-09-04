@@ -8,7 +8,7 @@ class Reply extends Model {
 
   use SoftDeletes;
 
-  protected $fillable = ['topic_id', 'body', 'body_original'];
+  protected $fillable = ['user_id', 'topic_id', 'body', 'body_original'];
 
   protected $dates = ['deleted_at'];
   // protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -26,5 +26,16 @@ class Reply extends Model {
   public function votes()
   {
     return $this->morphMany('App\Vote', 'votable');
+  }
+
+  public function getIsVotedAttribute($value)
+  {
+    return $value;
+  }
+
+  public function setIsVotedAttribute($value)
+  {
+    $this->attributes['is_voted'] = is_bool($value) ? $value : null;
+    // $this->attributes['is_voted'] = $value === true ? true : false;
   }
 }

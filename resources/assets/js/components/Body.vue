@@ -1,9 +1,9 @@
 <template>
   <div id="content" class="container">
     <breadcrumb></breadcrumb>
-    <router-link to='/login'>2</router-link>
+    <!-- <router-link to='/login'>2</router-link>
     <br>
-    <p>Child router path: {{ $route.fullPath }}</p>
+    <p>Child router path: {{ $route.fullPath }}</p> -->
     <router-view></router-view>
   </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
   import Breadcrumb from './Breadcrumb.vue'
   import ContentBody from './ContentBody.vue'
-  import VueRouter from 'vue-router'
+  /*import VueRouter from 'vue-router'
   import Login from './Login.vue'
   
   const ChildrenRouter = new VueRouter({
@@ -19,7 +19,7 @@
     routes: [
       {path:'/exam', component: ContentBody},
     ]
-  })
+  })*/
   export default {
     // router: ChildrenRouter,
     components: {

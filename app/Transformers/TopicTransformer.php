@@ -6,11 +6,13 @@ use App\Topic;
 class TopicTransformer extends BaseTransformer {
 
   use Traits\UserTrait;
-  
+
   public function transform(Topic $model)
   {
+    $replyTransformer = new ReplyTransformer();
     return [
       'id'                  => $model->id,
+      'category_id'         => $model->category_id,
       'title'               => $model->title,
       'body'                => $model->body,
       'creator'             => $this->userTrans($model->user),
@@ -18,8 +20,11 @@ class TopicTransformer extends BaseTransformer {
       'vote_count'          => $model->vote_count,
       'read_count'          => $model->read_count,
       'last_reply_user_id'  => $model->last_reply_user_id,
-      'created_at'          => $model->created_at,
-      'updateed_at'         => $model->updated_at,
+      'last_reply'          => $model->lastReply ? $replyTransformer->transform($model->lastReply) : null,
+      'created_at'          => $this->carbonTrans($model->created_at),
+      'created_humans'      => $this->diffForHumans($model->created_at),
+      'updated_at'          => $this->carbonTrans($model->updated_at),
+      'updated_humans'      => $this->diffForHumans($model->updated_at),
     ];
   }
 }

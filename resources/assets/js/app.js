@@ -30,17 +30,27 @@ const router = new VueRouter(routerConfig)
 
 const store = new Vuex.Store({
   state:{
-    nickname:'',
     token:'',
+    login:{
+      id:0,
+      nick_name:'',
+      avatar_url:'',
+    },
   },
   mutations:{
     login (state, payload) {
-      state.nickname = payload.nickname
+      state.login = payload
       state.token = 'Brear ' + payload.token
+      window.axios.defaults.headers.common['Authorization'] = state.token;
     },
     logout (state) {
-      state.nickname = '';
+      state.login = {
+        id:0,
+        nick_name:'',
+        avatar_url:'',
+      }
       state.token = '';
+      window.axios.defaults.headers.common['Authorization'] = null;
     }
   }
 })

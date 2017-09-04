@@ -23,6 +23,6 @@ class CategoryController extends ApiController
 
   public function show(Request $request, $categoryId)
   {
-    return $this->response->item($this->categoryR->getChildren($categoryId), new CategoryTransformer());
+    return $this->response->collection($this->categoryR->getChildren($categoryId), new CategoryTransformer());
   }  
 }

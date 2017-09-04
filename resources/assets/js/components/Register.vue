@@ -1,39 +1,39 @@
 <template>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-5 col-md-offset-4">
       <div class="login-block">
         <form class="form-horizontal" role="form" action="post">
 
           <div class="form-group" :class="classObject.nick_name">
-            <label class="col-lg-2 control-label" >称昵<span class="text-danger">*</span></label>
-            <input class="form-control col-lg-10" type="text" @blur="checkForm(1)" v-model="nick_name" placeholder="称昵">
+            <label class=" control-label" >称昵<span class="text-danger">*</span></label>
+            <input class="form-control " type="text" @blur="checkForm('nick_name')" v-model="nick_name" placeholder="称昵">
             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" v-show="feedback.nick_name == 1"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" v-show="feedback.nick_name == 2"></span>
           </div>
 
           <div class="form-group" :class="classObject.mobile">
-            <label class="col-lg-2 control-label" >手机</label>
-            <input  class="form-control col-lg-10" type="text" @blur="checkForm('mobile')" v-model="mobile" placeholder="手机">
+            <label class="control-label" >手机</label>
+            <input  class="form-control " type="text" @blur="checkForm('mobile')" v-model="mobile" placeholder="手机">
             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" v-show="feedback.mobile == 1"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" v-show="feedback.mobile == 2"></span>
           </div>
 
           <div class="form-group" :class="classObject.email">
-            <label class="col-lg-2 control-label" >邮箱</label>
-            <input  class="form-control col-lg-10" type="text" @blur="checkForm('email')" v-model="email" placeholder="邮箱">
+            <label class=" control-label" >邮箱</label>
+            <input  class="form-control " type="text" @blur="checkForm('email')" v-model="email" placeholder="邮箱">
             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" v-show="feedback.email == 1"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" v-show="feedback.email == 2"></span>
           </div>
           
           <div class="form-group" :class="classObject.password">
-            <label class="col-lg-2 control-label">密码<span class="text-danger">*</span></label>
-            <input class="form-control col-lg-10" type="password" @keyup="checkForm(4)" v-model="password" placeholder="密码">
+            <label class=" control-label">密码<span class="text-danger">*</span></label>
+            <input class="form-control" type="password" @keyup="checkForm('password')" v-model="password" placeholder="密码">
             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" v-show="feedback.password == 1"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" v-show="feedback.password == 2"></span>
           </div>
           <div class="form-group" :class="classObject.password_confirmation">
-            <label class="col-lg-2 control-label"  >确认密码<span class="text-danger">*</span></label>
-            <input class="form-control col-lg-10" type="password" @keyup="checkForm(5)" v-model="password_confirmation" placeholder="重复密码">
+            <label class=" control-label"  >确认密码<span class="text-danger">*</span></label>
+            <input class="form-control col-lg-10" type="password" @keyup="checkForm('password_confirmation')" v-model="password_confirmation" placeholder="重复密码">
             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" v-show="feedback.password_confirmation == 1"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" v-show="feedback.password_confirmation == 2"></span>
           </div>
@@ -111,6 +111,7 @@
             });
       },
       checkForm(inputType) {
+        console.log('inputType', inputType);
         if (this[inputType] == '') {
           this.feedback[inputType] = 0
           for (var p in this.classObject[inputType]) {

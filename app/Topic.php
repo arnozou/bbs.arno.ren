@@ -22,4 +22,14 @@ class Topic extends Model {
   {
     return $this->morphMany('App\Vote', 'votable');
   }
+
+  public function lastReply()
+  {
+    return $this->hasOne(Reply::class, 'topic_id', 'id')->orderBy('created_at', 'desc');
+  }
+
+  public function replies()
+  {
+    return $this->hasMany(Reply::class, 'topic_id', 'id');
+  }
 }

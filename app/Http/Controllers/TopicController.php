@@ -38,6 +38,7 @@ class TopicController extends ApiController
     }
     $where[] = ['category_id', '=', $categoryId];
     $topics = $this->topicR->with('user.info')->limit($pageSize)->findWhere($where);
+    $topics->load('lastReply');
 
     return $this->response->collection($topics, new TopicTransformer());
   }
