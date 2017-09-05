@@ -29,14 +29,14 @@
   export default{
     computed:{
       logined() {
-        if (this.$store.state.nickname) {
+        if (this.$store.state.login.id) {
           return true;
         } else {
           return false;
         }
       },
       nickname() {
-        return this.$store.state.nickname
+        return this.$store.state.login.nickname
       }
     },
     methods:{

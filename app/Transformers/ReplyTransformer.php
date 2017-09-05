@@ -12,7 +12,7 @@ class ReplyTransformer extends BaseTransformer {
     return [
       'id'                  => $model->id,
       'body'                => $model->body,
-      'creator'             => $this->userTrans($model->user),
+      'creator'             => $model->relationLoaded('user') ? $this->userTrans($model->user) : null,
       'vote_count'          => $model->vote_count,
       'is_voted'            => $model->is_voted,
       'updated_at'          => $this->carbonTrans($model->updated_at),

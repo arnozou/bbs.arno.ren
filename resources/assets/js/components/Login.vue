@@ -68,6 +68,7 @@
           timer:0,
           leftSeconds:0,
         },
+        mobileState:'',
         error:'',
       }
     },
@@ -119,7 +120,7 @@
 
         let data = {password:this.password}
         data[this.usernameType] = this.username
-        axios.post('login/', data).then((response) => {
+        axios.post('login', data).then((response) => {
           this.$store.commit('login', response.data.data);
           this.$router.push('/home');
 

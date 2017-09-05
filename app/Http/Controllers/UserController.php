@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Repositories\Interfaces\UserInterface;
 use App\Transformers\UserTransformer;
 use App\Transformers\UserEditTransformer;
+use App\Transformers\TopicTransformer;
+use App\Transformers\ReplyTransformer;
 use Mail;
 use Auth;
 
@@ -171,5 +173,32 @@ class UserController extends ApiController
   public function destroy($id)
   {
       //
+  }
+
+  public function topics($userId)
+  {
+    $user = $this->userR->find($userId);
+    if ($user) {
+      $user->load('topics');
+      $user->topics->load('user.info');
+      $user->topics->load('lastReply');
+      /*foreach ($user->topics as $topic) {
+        $topic->setRelation('user', $user);
+      }*/
+      // dump($user->topics);
+      return $this->response->collection($user->topics, new TopicTransformer());
+    } else {
+      return $this->response->noContent();
+    }
+  }
+  public function replies($userId)
+  {
+    $user = $this->userR->find($userId);
+    if ($user) {
+      $user->load('replies');
+      return $this->response->collection($user->replies, new ReplyTransformer());
+    } else {
+      return $this->response->noContent();
+    }
   }
 }

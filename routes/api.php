@@ -27,7 +27,7 @@ Route::group([], function(){
 
 $api = app('Dingo\Api\Routing\Router');
 
-$api->version(['0.1.0'], function($api) {
+$api->version(['0.1.0'], ['middleware' => 'jwt.refresh'], function($api) {
   $api->post('/login/wechat', 'App\Http\Controllers\Auth\LoginController@wechat');
   $api->post('/login/mobile', 'App\Http\Controllers\Auth\LoginController@mobile');
   $api->post('/login', 'App\Http\Controllers\Auth\LoginController@login');
@@ -36,15 +36,18 @@ $api->version(['0.1.0'], function($api) {
   $api->post('/captcha/send/mobile', //['middleware' => 'api.throttle'],
     'App\Http\Controllers\Auth\CaptchaController@sendToMobile');
 
+
   // Restful api
 
-  
+  $api->get('/users/{user_id}/topics', 'App\Http\Controllers\UserController@topics');
+  $api->get('/users/{user_id}/replies', 'App\Http\Controllers\UserController@replies');
+    
 
   $api->get('/categories', 'App\Http\Controllers\CategoryController@index');
   $api->get('/categories/{category_id}', 'App\Http\Controllers\CategoryController@show');
   $api->get('/categories/{category_id}/topics', 'App\Http\Controllers\TopicController@index');
 
-  $api->get('/topics', 'App\Http\Controllers\TopicController@index');
+  $api->get('/topics', 'App\Http\Controllers\TopApp\Http\Controllers\UserControllericController@index');
   $api->get('/topics/{topic_id}', 'App\Http\Controllers\TopicController@show');
   // $api->post('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
 
@@ -53,7 +56,10 @@ $api->version(['0.1.0'], function($api) {
 });
 
 $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
-  $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
+  $api->group(['middleware' => 'jwt.refresh'], function($api) {
+    $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
+
+  // $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
   $api->get('/users/test', 'App\Http\Controllers\UserController@edit1');
   $api->patch('/users', 'App\Http\Controllers\UserController@update');
   $api->patch('/users/password', 'App\Http\Controllers\UserController@updatePassword');
@@ -77,8 +83,13 @@ $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
   $api->delete('/topics/replies/{reply_id}', 'App\Http\Controllers\ReplyController@destory');
   $api->post('/topics/replies/{reply_id}/vote', 'App\Http\Controllers\ReplyController@vote');
   $api->delete('/topics/replies/{reply_id}/vote', 'App\Http\Controllers\ReplyController@unvote');
+  });
 });
 
 $api->version(['0.1.0'], function($api) {
-  $api->get('/users/{id}', 'App\Http\Controllers\UserController@show');
+  $api->group(['middleware' => 'jwt.refresh'], function($api) {
+    $api->get('/users/{id}', 'App\Http\Controllers\UserController@show');
+
+  });
+  // $api->get('/users/{id}', 'App\Http\Controllers\UserController@show');
 });

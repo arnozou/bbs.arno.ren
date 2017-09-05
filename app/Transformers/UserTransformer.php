@@ -17,7 +17,7 @@ class UserTransformer extends BaseTransformer {
       'qq'            => $model->info->qq,
       'intro'         => $model->info->intro,
       'avatar_url'    => $model->info->avatar_url,
-      'created_at'    => $model->created_at,
+      'created_at'    => $this->carbonTrans($model->created_at),
       // 'posts'      => 
     ];
   }

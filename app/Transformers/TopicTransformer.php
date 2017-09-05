@@ -20,7 +20,8 @@ class TopicTransformer extends BaseTransformer {
       'vote_count'          => $model->vote_count,
       'read_count'          => $model->read_count,
       'last_reply_user_id'  => $model->last_reply_user_id,
-      'last_reply'          => $model->lastReply ? $replyTransformer->transform($model->lastReply) : null,
+      'last_reply'          => $model->relationLoaded('lastReply') ? $model->lastReply ?
+       $replyTransformer->transform($model->lastReply) : null : null,
       'created_at'          => $this->carbonTrans($model->created_at),
       'created_humans'      => $this->diffForHumans($model->created_at),
       'updated_at'          => $this->carbonTrans($model->updated_at),

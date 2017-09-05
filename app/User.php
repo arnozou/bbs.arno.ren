@@ -33,4 +33,13 @@ class User extends Authenticatable
        return $this->hasOne(UserInfo::class, 'user_id', 'id');
     }
 
+    public function topics()
+    {
+        return $this->hasMany(Topic::class, 'user_id', 'id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Reply::class, 'user_id', 'id');
+    }
 }
