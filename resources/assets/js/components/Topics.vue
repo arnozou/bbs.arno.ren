@@ -28,11 +28,11 @@
 
     <div class="col-md-1 hidden-sm hidden-xs stats">
     <span class="{children.unread-class} human-readable-number" title="topic.reply_count">{{topic.reply_count}}</span><br>
-    <small>主题</small>
+    <small>回复</small>
   </div>
   <div class="col-md-1 hidden-sm hidden-xs stats">
-    <span class="{children.unread-class} human-readable-number" title="topic.reply_count">{{topic.vote_count}}</span><br>
-    <small>帖子</small>
+    <span class="{children.unread-class} human-readable-number" title="topic.vote_count">{{topic.vote_count}}</span><br>
+    <small>赞</small>
   </div>
     <div class="col-md-3 col-sm-3 teaser hidden-xs" component="topic/teaser">
       <div class="card" style="border-color: #DC9656">

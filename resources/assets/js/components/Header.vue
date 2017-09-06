@@ -17,7 +17,8 @@
         <ul class="nav navbar-nav navbar-right">
           <li v-show="!logined"><router-link to="/login">登录</router-link></li>
           <li v-show="!logined"><router-link to="/register">注册</router-link></li>
-          <li v-show="logined"><router-link to="/userInfo" v-text="nickname"></router-link></li>
+          <li v-show="logined"><router-link :to="'/user/' + user.id" ><img class="avatar" :src="user.avatar_url" alt=""></router-link></li>
+          <li v-show="logined"><router-link :to="'/user/' + user.id" v-text="nickname"></router-link></li>
           <li v-show="logined"><a @click="logout" >登出</a></li>
         </ul>
       </div>
@@ -36,8 +37,12 @@
         }
       },
       nickname() {
-        return this.$store.state.login.nickname
+        return this.$store.state.login.nick_name
+      },
+      user() {
+        return this.$store.state.login
       }
+
     },
     methods:{
       logout() {
@@ -50,5 +55,14 @@
 <style>
   li {
     list-style-type: none;
+  }
+  .avatar{
+    border-radius: 50%;
+  } 
+</style>
+<style scoped>
+  .avatar{
+    width: 30px;
+    height: 30px;
   }
 </style>

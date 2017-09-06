@@ -18,9 +18,12 @@
           <router-link :to="'/user/' + topic.creator.id" v-text="topic.creator.nick_name"></router-link>
           于
           <router-link :to="'/topic/' + topic.id" v-text="moment(topic.created_at).fromNow()"></router-link>
-          last reply: 
-          <router-link :to="'/user/' + topic.last_reply.creator.id" v-text="topic.last_reply.creator.nick_name"></router-link>
-          <router-link :to="'/topic/' + topic.id" v-text="moment(topic.last_reply.created_at).fromNow()"></router-link>
+          <div v-if="topic.last_reply">
+            
+            last reply: 
+            <router-link  :to="'/user/' + topic.last_reply.creator.id" v-text="topic.last_reply.creator.nick_name"></router-link>
+            <router-link :to="'/topic/' + topic.id" v-text="moment(topic.last_reply.created_at).fromNow()"></router-link>
+          </div>
         </div>
         
         <div class="topic-body" v-html="topic.body"></div>
@@ -73,7 +76,7 @@
         })
 
         axios.get('topics/' + this.$route.params.topic_id + '/replies').then((response) => {
-          this.replies = response.data.data
+          this.replies = response.data.data ? response.data.data : [];
           this.loading = false
           console.log('success get replies');
         }).catch((error) => {

@@ -48,6 +48,9 @@
               <router-link class="text" :to="'/user/' + user.id + '/topics'">文章</router-link>
           </div>
         </div>
+        <router-link class="btn btn-primary btn-block" :to="'/user/' + user.id + '/edit'" v-show="user.id == $store.state.login.id">
+            <i class="fa fa-edit"></i> 编辑个人资料
+        </router-link>
       </div>
     </div>
 
@@ -171,10 +174,6 @@
     padding: 10px;
     margin: 0 0 20px 0;
     box-shadow: 0 .2em 0 0 #ddd,0 0 0 1px #ddd;
-  }
-  .avatar {
-    border-radius: 50%;
-    
   }
   .avatar-100 {
     width:100px;

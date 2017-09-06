@@ -12,15 +12,17 @@ export default {
     {path:'/example', component: Example},
     {
       path:'/home',
-      component: Body,
+      component: CategoryIndex,
     },
+    {path:'/', component:CategoryIndex},
     {path:'/login', component: Login},
     {path:'/register', component: Register},
     {path:'/categories', component: CategoryIndex},
     {path:'/categories/:categories_id', component: CategoryIndex},
     {path:'/topic/:topic_id', component: Topic},
     {path:'/user/:user_id', component: User},
-    {path:'/user/:user_id/edit', component: UserEdit}
+    {path:'/user/:user_id/edit', component: UserEdit},
+    {path:'/user/:user_id/edit/:edit_type', component: UserEdit},
     // {path:'*', redirect: '/home'},
   ]
 }

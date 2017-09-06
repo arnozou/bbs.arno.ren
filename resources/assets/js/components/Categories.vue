@@ -32,13 +32,13 @@
   </div>
 
     <div class="col-md-1 hidden-sm hidden-xs stats">
-    <span class="{children.unread-class} human-readable-number" title="150">150</span><br>
+    <span class="{children.unread-class} human-readable-number" title="150" v-text="category.topic_count"></span><br>
     <small>主题</small>
   </div>
-  <div class="col-md-1 hidden-sm hidden-xs stats">
-    <span class="{children.unread-class} human-readable-number" title="233">233</span><br>
+  <!-- <div class="col-md-1 hidden-sm hidden-xs stats">
+    <span class="{children.unread-class} human-readable-number" v-text="category.topic_count">233</span><br>
     <small>帖子</small>
-  </div>
+  </div> -->
     <div class="col-md-3 col-sm-3 teaser hidden-xs" component="topic/teaser">
           <div class="card" style="border-color: #DC9656">
 

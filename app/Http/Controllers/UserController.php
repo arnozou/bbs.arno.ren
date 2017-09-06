@@ -149,7 +149,15 @@ class UserController extends ApiController
 
   public function updatePassword(Request $request)
   {
-
+    $this->validate($request->all(), [
+      'password'   => 'required|confirmed'
+      ]);
+    $this->user()->password = \Hash::make($request->input('password'));
+    if ($this->user()->save()) {
+      return $this->response->accepted();
+    } else {
+      return $this->response->errorInternal();
+    }
   }
   public function updateAvatar(Request $request)
   {
@@ -191,11 +199,13 @@ class UserController extends ApiController
       return $this->response->noContent();
     }
   }
+
   public function replies($userId)
   {
     $user = $this->userR->find($userId);
     if ($user) {
       $user->load('replies');
+      $user->replies->load('user.info');
       return $this->response->collection($user->replies, new ReplyTransformer());
     } else {
       return $this->response->noContent();

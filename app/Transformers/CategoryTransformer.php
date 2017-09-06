@@ -16,6 +16,7 @@ class CategoryTransformer extends BaseTransformer {
       'color'         => $category->color,
       'bg_color'      => $category->bg_color,
       'children'      => $category->children,
+      'last_reply'    => $category->relationloaded('last_reply') ? $category->getRelation('last_reply') : [],
       // 'posts'         =>
     ];
   }

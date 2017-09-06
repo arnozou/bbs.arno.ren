@@ -47,10 +47,15 @@ class ReplyController extends ApiController
     ];
 
     $datas['body'] = $this->replyR->parseMarkdown($datas['body_original']);
-
+   
     $reply = $this->replyR->create($datas);
     if ($reply) {
       $topic->increment('reply_count');
+
+      $category = new \App\Category();
+      $category->id = $topic->category_id;
+      $category->redisSaveLastReplyId($reply->id);
+
       return $this->response->created();
     } else {
       return $this->response->errorInternal();

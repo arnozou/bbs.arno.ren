@@ -37,7 +37,7 @@
     },
     watch:{
       initialReplies() {
-        this.replies = this.initialReplies
+        this.replies = this.initialReplies ? this.initialReplies : []
       }
     },
     methods:{
@@ -45,17 +45,19 @@
         return moment(date)
       },
       vote(index) {
-        if (this.replies[index].is_voted === null) {
+        if (!this.$store.state.login.id) {
           // 跳到登录
-          alert('请登录');
+          alert('请登录')
+          return
         } else if (this.replies[index].is_voted === true) {
-          let method = 'post'
+          let methods = 'post'
         } else {
-          let method = 'delete'
+          let methods = 'delete'
         }
+        console.log(methods);
         axios({
-          method:method,
-          url:'/topics/replies/' + this.replies[index].id + '/vote'
+          method: methods,
+          url:'/topics/replies/' + this.replies[index].id + '/vote',
         }).then((response) => {
           this.replies[index].is_voted = !this.replies[index].is_voted
           this.replies[index].vote_count = response.data.vote_count

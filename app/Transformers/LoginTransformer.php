@@ -13,7 +13,7 @@ class LoginTransformer extends BaseTransformer {
       'mobile'    => $user->mobile,
       'email'     => $user->email,
       'nick_name' => $user->info->nick_name,
-      'avator_url'=> $user->info->avator_url,
+      'avatar_url'=> $user->info->avatar_url,
       'token'     => JWTAuth::fromUser($user),
     ];
   }

@@ -14,7 +14,11 @@ class CategoryController extends ApiController
   }
   public function index(Request $request)
   {
-    return $this->response->collection($this->categoryR->getChildren(0), new CategoryTransformer());
+    $categories = $this->categoryR->getChildren(0);
+    $categories = $this->categoryR->loadLastReplies($categories);
+    // dump($categories);
+
+    return $this->response->collection($categories, new CategoryTransformer());
   }
 
   public function store(Request $request)
