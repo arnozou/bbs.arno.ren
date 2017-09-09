@@ -12,6 +12,7 @@
         "laravel/tinker": "~1.0",
         "mews/purifier": "^2.0",
         "mnabialek/laravel-sql-logger": "^1.1",
+        "overtrue/laravel-wechat": "~3.1",
         "parsedown/laravel": "^1.0",
         "predis/predis": "~1.0",
         "silber/bouncer": "v1.0.0-beta.3",
