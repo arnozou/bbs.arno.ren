@@ -18,6 +18,10 @@ class Topic extends Model {
     return $this->belongsTo(User::class, 'user_id', 'id');
   }
 
+  public function userInfo()
+  {
+    return $this->belongsTo(UserInfo::class, 'user_id', 'user_id');
+  }
   public function votes()
   {
     return $this->morphMany('App\Vote', 'votable');

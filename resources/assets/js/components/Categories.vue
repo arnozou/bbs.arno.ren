@@ -11,13 +11,13 @@
     </div>
 
     <h2 class="title">
-      <router-link :to=" '/categories/' + category.id">{{category.title}}</router-link>
+      <router-link :to=" '/categories/' + category.id" >{{category.title}}</router-link>
       <br>
       <div class="description">
         <p>{{category.description}}</p>
       </div>
             <span class="category-children">
-            <router-link :to="'/category/' + child.id" v-for="child in category.children" :key="child.id">
+            <router-link :to="'/categories/' + child.id" v-for="child in category.children" :key="child.id">
               <span class="child-icon" :style="{'color':child.color, 'background-color':child.bg_color}">
                 <span class="glyphicon" :class="[child.icon]" aria-hidden="true"></span>
               </span>
@@ -40,33 +40,27 @@
     <small>帖子</small>
   </div> -->
     <div class="col-md-3 col-sm-3 teaser hidden-xs" component="topic/teaser">
-          <div class="card" style="border-color: #DC9656">
+      <div class="card" style="border-color: #DC9656" v-if="category.last_reply">
 
-            <div component="category/posts">
+        <div component="category/posts" >
           <p>
-            <a href="/user/izzq920817">
-                      <span class="user-icon user-img" title="" style="background-color: #673ab7;" data-original-title="iZzq920817">I</span>
-            </a>
-            <a class="permalink" href="/topic/595/psp游戏-极品飞车13变速-美版/1">
-              <small class="timeago" title="2017年8月27日 下午12:26" datetime="2017-08-27T04:26:44.322Z">大约7小时之前</small>
-            </a>
+            <router-link :to="'/user/' + creator(category.last_reply).id">
+              <img class="avatar avatar-20" :src="creator(category.last_reply).avatar_url" alt="">
+            </router-link>
+            <router-link :to="'/topic/' + category.last_reply.topic_name" >
+              <small class="timeago" title="category.last_reply.created_at" datetime="2017-08-27T04:26:44.322Z" v-text="moment(category.last_reply.created_at).fromNow()"></small>
+            </router-link>
           </p>
-          <div class="post-content">
-            <p>游戏平台：PSP游戏<br>
-              类型：竞速游戏<br>
-              语言：美版游戏<br>
-              厂商：EA<br>
-              发行时间：2009-9-15<br>
-              更新时间：2013-10-23 16:09:27 16:09<br>
-              游戏大小：929 MB<br>
-              游戏汉化：暂无汉化<br>
-            </p>
-            <p><a href="https://www.pipipan.com/fs/14160278-217184527" rel="nofollow">立即下载</a></p>
-
+          <div class="post-content" v-html="category.last_reply.body">
+            
           </div>
         </div>
 
-        
+      </div>
+      <div class="card" style="border-color: #DC9656" v-else>
+        <div>
+          暂无回复
+        </div>
       </div>
   </div>
 
@@ -81,7 +75,7 @@
 
 <script>
 
-
+  import * as moment from 'moment'
 
   export default {
     props:['categories'],
@@ -94,6 +88,16 @@
     watch: {
     },
     methods: {
+      moment(data) {
+        return moment(data)
+      },
+      creator(item) {
+        if (item.creator) {
+          return item.creator
+        }
+
+        return {}
+      }
     },
   }
 </script>
@@ -140,5 +144,11 @@
     height: 53px;
     font-size: 12px;
     line-height: 14px;
+  }
+</style>
+<style scoped>
+  .avatar-20 {
+    width: 20px;
+    height:20px;
   }
 </style>

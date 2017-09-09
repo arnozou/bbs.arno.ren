@@ -21,9 +21,17 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import Body from './components/Body.vue'
 import Header from './components/Header.vue'
+import Writer from './components/Writer.vue'
 import routerConfig from './router.config.js'
 Vue.use(VueRouter)
 Vue.use(Vuex)
+
+Vue.directive('title', {
+  update: function (el, binding) {
+    document.title = binding.value
+    // document.getElementById('title').innerText = document.title
+  }
+})
 
 
 const router = new VueRouter(routerConfig)
@@ -36,6 +44,7 @@ const store = new Vuex.Store({
       nick_name:'',
       avatar_url:'',
     },
+    categories:[],
   },
   mutations:{
     login (state, payload) {
@@ -51,6 +60,9 @@ const store = new Vuex.Store({
       }
       state.token = '';
       window.axios.defaults.headers.common['Authorization'] = null;
+    },
+    categories(state, categories) {
+      state.categories = categories;
     }
   }
 })
@@ -61,7 +73,8 @@ const rm = new Vue({
     store,
     components:{
       'top-header': Header,
-      'contents': Body
+      'contents': Body,
+      'writer': Writer
     }
 });
 

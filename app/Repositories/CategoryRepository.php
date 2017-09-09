@@ -30,6 +30,7 @@ class CategoryRepository extends Repository Implements CategoryInterface {
     }
     // dump($categories);
     $replies = \App\Reply::whereIn('id', $ids)->get();
+    $replies->load('userInfo');
     // dump($replies);
     foreach ($categories as $category) {
       // dump($category->last_reply_id, $replies->find($category->last_reply_id));

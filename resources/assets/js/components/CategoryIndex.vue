@@ -1,6 +1,7 @@
 <template>
   <div>
-    <categories :categories="categories"></categories>
+    
+    <categories :categories="categories" v-title="title" :data-title="title"></categories>
     <topics :topics="topics"></topics>
   </div>
 </template>
@@ -17,12 +18,29 @@
        topics:[],
        category: 0,
        // category: 1,
+       title:''
       }
     },
     watch: {
       $route() {
-        console.log('路由改变');
+        // console.log('路由改变');
+        this.topics = [];
         this.fetchData();
+
+        // 改标题
+        // console.log('改标题', this.$route.params.categories_id)
+        if (this.$route.params.categories_id) {
+          var i = this.$store.state.categories.length
+          while (i--)
+          {
+            if (this.$store.state.categories[i].id - 0 === this.$route.params.categories_id - 0) {
+              this.title = this.$store.state.categories[i].title
+            }
+            
+          }
+        } else {
+          this.title = '分类';
+        }
       }
     },
     methods: {
@@ -32,8 +50,22 @@
         let categoryUrl = 'categories' + (this.category ? '/' + this.category : '')
         axios.get(categoryUrl).then((response) => {
           this.categories = response.data.data
+
+          var categories = this.$store.state.categories.concat(this.categories)
+          categories.sort(function(a, b) {
+           return a.id - b.id
+          })
+          var i = categories.length
+          while(--i)
+          {
+            if (categories[i].id === categories[i-1].id) {
+              categories.splice(i, 1)
+            }
+          }
+          this.$store.commit('categories', categories)
           console.log('success get categories');
         }).catch((error) => {
+          console.log(error);
           console.log('error get categories')
         })
 

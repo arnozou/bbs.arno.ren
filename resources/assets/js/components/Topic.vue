@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" v-title="'主题'+topic.title">
     <div class="col-lg-9 col-sm-12">
       <div class="loading" v-if="loading">
         loading....

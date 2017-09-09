@@ -8,6 +8,7 @@
   <div id="app">
     <top-header></top-header>
     <contents></contents>
+    <writer></writer>
   </div>
 </body>
   <link rel="stylesheet" href="./css/app.css">

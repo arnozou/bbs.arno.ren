@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" v-title="个人中心">
     <div class="col-md-3">
       <div class="box">
         <div class="panding-md">

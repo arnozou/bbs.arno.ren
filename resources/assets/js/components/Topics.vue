@@ -39,8 +39,9 @@
 
         <div component="category/posts" v-if="topic.last_reply">
               <p>
-                <router-link :to="'/user/' + lastReplierId(topic.last_reply)">
-                  <img class="user-icon" :src="lastReplierAvatar(topic.last_reply)" alt="">
+                <!-- <router-link :to="'/user/' +  lastReplierId(topic.last_reply)"> -->
+                <router-link :to="'/user/' +  (topic.last_reply.creator ? topic.last_reply.creator.id : '')">
+                  <img class="user-icon" :src="(topic.last_reply.creator ? topic.last_reply.creator.avatar_url : '')" alt="">
                 </router-link>
                 <router-link :to="'/topic/' + topic.id"><small :title="topic.last_reply.created_at" v-text="topic.updated_humans"></small></router-link>
                 <!-- <a class="permalink" href="/topic/595/psp游戏-极品飞车13变速-美版/1">

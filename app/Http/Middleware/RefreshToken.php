@@ -21,10 +21,15 @@ class RefreshToken
         $response = $next($request);
 
         $oldToken = JWTAuth::getToken();
-        if (!$oldToken) {
+        if ($oldToken) {
+          try {
+            $payload = JWTAuth::getPayload();
+          } catch (Exception $e) {
             return $response;
+          }
+        } else {
+          return $response;
         }
-        $payload = JWTAuth::getPayload();
         $exp = $payload->get('exp');
 
         if ($diff = Carbon::now()->diffInSeconds(Carbon::createFromTimestamp($exp), false)) {

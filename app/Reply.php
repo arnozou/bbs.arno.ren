@@ -18,6 +18,11 @@ class Reply extends Model {
     return $this->belongsTo(User::class, 'user_id', 'id');
   }
 
+  public function userInfo()
+  {
+    return $this->belongsTo(UserInfo::class, 'user_id', 'user_id');
+  }
+
   public function topic()
   {
     return $this->belongsTo(Topic::class, 'topic_id', 'id');

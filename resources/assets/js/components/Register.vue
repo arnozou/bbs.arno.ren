@@ -1,8 +1,8 @@
 <template>
-  <div class="row">
+  <div class="row" v-title="注册">
     <div class="col-md-5 col-md-offset-4">
       <div class="login-block">
-        <form class="form-horizontal" role="form" action="post">
+        <form class="form-horizontal" @submit.prevent="login" role="form" action="post">
 
           <div class="form-group" :class="classObject.nick_name">
             <label class=" control-label" >称昵<span class="text-danger">*</span></label>
@@ -33,11 +33,13 @@
           </div>
           <div class="form-group" :class="classObject.password_confirmation">
             <label class=" control-label"  >确认密码<span class="text-danger">*</span></label>
-            <input class="form-control col-lg-10" type="password" @keyup="checkForm('password_confirmation')" v-model="password_confirmation" placeholder="重复密码">
+            <input class="form-control" type="password" @keyup="checkForm('password_confirmation')" v-model="password_confirmation" placeholder="重复密码">
             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" v-show="feedback.password_confirmation == 1"></span>
             <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" v-show="feedback.password_confirmation == 2"></span>
           </div>
-
+          <div class="form-group">
+            <button class="btn btn-lg btn-primary"  type="submit">注册</button>
+          </div>
         </form>
       </div>
     </div>
@@ -84,31 +86,22 @@
     },
     methods: {
       login() {
-        if (!this.usernameType) {
-          return 
+        var data = {
+          nick_name:this.nick_name,
+          password:this.password,
+          email:this.email,
+          mobile:this.mobile,
+          password_confirmation:this.password_confirmation,
         }
-
-        let data = {password:this.password}
-        data[this.usernameType] = this.username
-
-        axios.post('login/' + this.usernameType, data,{
-          baseURL:'https://bbs.arno.ren/api/',
-          auth:this.$store.state.token,
-        }).then((response) => {
-          
-
+        axios.post('register', data).then((response) => {
+          this.$store.commit('login', response.data.data)
+          this.$router.push('home');
         }).catch(function(error) {
-          if (error.response) {
-          // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-            });
+          if (error.response.status == 422) {
+            console.log('error 422', error.response);
+          }
+          console.log(error.config);
+        });
       },
       checkForm(inputType) {
         console.log('inputType', inputType);
@@ -120,6 +113,7 @@
         }
         if (inputType == 'password_confirmation') {
           this.setInputState(inputType, this.password == this.password_confirmation)
+          return 
         }
         this.setInputState(inputType, this.regList[inputType].test(this[inputType]))
       },

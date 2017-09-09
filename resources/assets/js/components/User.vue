@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" v-title="user.nick_name">
     <div class="col-md-3">
       <div class="box">
 

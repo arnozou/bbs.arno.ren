@@ -54,7 +54,7 @@ class UserController extends ApiController
       'password'          => 'required|string|min:6|confirmed',
       // 'password_confirmation'  => 'same:password',
       'real_name'         => 'nullable|string|realname|unique:user_infos',
-      'gender'            => 'required|between:0,1',
+      'gender'            => 'nullable|between:0,1',
       'age'               => 'nullable|between:0,150',
       'qq'                => 'nullable|digits_between:8,11',
       'intro'             => 'nullable|string',

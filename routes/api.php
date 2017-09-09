@@ -47,7 +47,7 @@ $api->version(['0.1.0'], ['middleware' => 'jwt.refresh'], function($api) {
   $api->get('/categories/{category_id}', 'App\Http\Controllers\CategoryController@show');
   $api->get('/categories/{category_id}/topics', 'App\Http\Controllers\TopicController@index');
 
-  $api->get('/topics', 'App\Http\Controllers\TopApp\Http\Controllers\UserControllericController@index');
+  $api->get('/topics', 'App\Http\Controllers\TopicController@index');
   $api->get('/topics/{topic_id}', 'App\Http\Controllers\TopicController@show');
   // $api->post('/users/avatar', 'App\Http\Controllers\UserController@updateAvatar');
 

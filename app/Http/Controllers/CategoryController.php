@@ -12,9 +12,15 @@ class CategoryController extends ApiController
   {
     $this->categoryR = $categoryRepository;
   }
+
   public function index(Request $request)
   {
-    $categories = $this->categoryR->getChildren(0);
+    $parentId = $request->input('parent_id', 0);
+    if ((int)$parentId == -1) {
+      return $this->response->collection($this->categoryR->all(), new CategoryTransformer());
+    }
+
+    $categories = $this->categoryR->getChildren($parentId);
     $categories = $this->categoryR->loadLastReplies($categories);
     // dump($categories);
 
@@ -27,6 +33,9 @@ class CategoryController extends ApiController
 
   public function show(Request $request, $categoryId)
   {
-    return $this->response->collection($this->categoryR->getChildren($categoryId), new CategoryTransformer());
+    $categories = $this->categoryR->getChildren($categoryId);
+    $categories->loadLastReplies($categories);
+
+    return $this->response->collection($categories, new CategoryTransformer());
   }  
 }

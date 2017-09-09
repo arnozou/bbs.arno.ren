@@ -11,14 +11,14 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Route::group([], function() {
-  Route::get('/home', function() {
+  Route::get('/', function() {
     return view('home');
   });
 
-  Route::get('/mail', 'UserController@edit');
+  // Route::get('/mail', 'UserController@edit');
 });

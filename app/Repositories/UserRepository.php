@@ -48,7 +48,7 @@ class UserRepository extends Repository implements UserInterface {
 
     $userInfo = new UserInfo();
     $userInfo->fill($data);
-    $userInfo->avatar_url = 'http://blog.qiji.tech/wp-content/uploads/2016/07/test.jpg';
+    $userInfo->avatar_url = \Storage::url('avatars/GCZaU1jL9Z2abqe5rbo3sodjNujJuYhEtXnw4E3l.jepg');
 
     DB::beginTransaction();
 
