@@ -46,8 +46,22 @@
     },
     methods:{
       logout() {
-        this.$store.commit('logout');
+        axios.post('logout', {}).then((response) => {
+          this.$store.commit('logout');
+        }).catch((error) => {
+          console.log('logout fail');
+        })
       }
+    },
+    created() {
+      axios.post('/relogin', {}).then((response) => {
+        // console.log('relogin', response);
+        if (response.status == 200 && response.data.data) {
+          this.$store.commit('login', response.data.data);
+        } else if (response.status == 204) {
+          console.log('cannt get user info');
+        }
+      })
     }
   }
 </script>

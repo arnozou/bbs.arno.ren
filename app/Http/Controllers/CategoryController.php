@@ -34,7 +34,7 @@ class CategoryController extends ApiController
   public function show(Request $request, $categoryId)
   {
     $categories = $this->categoryR->getChildren($categoryId);
-    $categories->loadLastReplies($categories);
+    $categories = $this->categoryR->loadLastReplies($categories);
 
     return $this->response->collection($categories, new CategoryTransformer());
   }  

@@ -12,6 +12,8 @@ use App\Http\Requests\EmailLogin;
 use App\User;
 use Auth;
 use App\Http\Controllers\Traits\DingoValidateTrait;
+use Carbon\Carbon;
+use JWTAuth;
 // use Validator;
 
 class LoginController extends ApiController
@@ -89,11 +91,46 @@ class LoginController extends ApiController
         
         $data = $request->intersect(['email', 'mobile', 'password']);
         if (Auth::once($data)) {
-            return $this->response->item(Auth::getLastAttempted(), new \App\Transformers\LoginTransformer());
+            $user = Auth::getLastAttempted();
+            $customClaims = ['exp' => Carbon::tomorrow()->timestamp];
+            $token = JWTAuth::fromUser($user, $customClaims);
+            $cookie = \Cookie::make('relogin', $token, 840);
+            return $this->response->item($user, new LoginTransformer())->cookie($cookie);
         } else {
             return $this->response->errorForbidden('用户名和密码不匹配');
         }
     }
+
+    public function relogin(Request $request)
+    {
+        if ($reloginCookie = $request->cookie('relogin')) {
+            logger('relogin', ['cookie' => $reloginCookie]);
+            try {
+              $user = JWTAuth::authenticate($reloginCookie);
+              $newToken = JWTAuth::refresh($reloginCookie);
+            } catch (\Exception $e) {
+              return $this->response->noContent();
+            }
+            
+            $newCookie = \Cookie::make('relogin', $newToken, 840);
+            return $this->response->item($user, new LoginTransformer())->cookie($newCookie);
+        }
+
+      return $this->response->noContent();
+    }
+
+    public function logout(Request $request)
+    {
+        if ($this->user()) {
+            JWTAuth::invalidate();
+            $cookieToken = $request->cookie('relogin');
+            JWTAuth::invalidate($cookieToken);
+            $cookie = \Cookie::make('relogin', '', 1);
+            return $this->response->accepted()->cookie($cookie);
+        }
+
+    }
+
     public function email(EmailLogin $request)
     {
         $datas = $request->all();

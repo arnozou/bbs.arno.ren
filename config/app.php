@@ -184,6 +184,8 @@ return [
         Silber\Bouncer\BouncerServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
         Parsedown\Providers\ParsedownServiceProvider::class,
+        Overtrue\LaravelWechat\ServiceProvider::class,
+        Laggards\Aliyun\AliyunServiceProvider::class,
     ],
 
     /*
@@ -236,7 +238,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
-
+        'EasyWeChat' => Overtrue\LaravelWechat\Facade::class,
+        'Aliyun' => Laggards\Aliyun\Facades\Aliyun::class,
     ],
 
 ];

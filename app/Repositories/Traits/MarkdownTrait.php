@@ -6,6 +6,9 @@ trait MarkdownTrait {
 
   protected function parseMarkdownOnly($text)
   {
+    /*return Parsedown::instance()
+    ->setBreaksEnabled(true) # enables automatic line breaks
+    ->text($text); */
     return parsedown($text);
   }
 

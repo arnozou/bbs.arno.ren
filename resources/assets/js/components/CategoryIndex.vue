@@ -1,6 +1,10 @@
 <template>
   <div>
-    
+    <div class="clearfix">
+      <button @click="showModal()" class="btn btn-primary" style="margin-left: 40px" v-text="newTopicText"></button>
+      <span class="pull-right" component="category/controls">
+      </span>
+    </div>
     <categories :categories="categories" v-title="title" :data-title="title"></categories>
     <topics :topics="topics"></topics>
   </div>
@@ -10,7 +14,7 @@
 
   import Categories from './Categories.vue'
   import Topics from './Topics.vue'
-
+  import bus from './Bus'
   export default {
     data() {
       return {
@@ -18,7 +22,16 @@
        topics:[],
        category: 0,
        // category: 1,
-       title:''
+       title:'',
+      }
+    },
+    computed:{
+      newTopicText(){
+        if (this.$store.state.login.id) {
+          return '新主题'
+        } else {
+          return '登录后发表'
+        }
       }
     },
     watch: {
@@ -56,7 +69,8 @@
            return a.id - b.id
           })
           var i = categories.length
-          while(--i)
+
+          while( --i > 0)
           {
             if (categories[i].id === categories[i-1].id) {
               categories.splice(i, 1)
@@ -78,6 +92,14 @@
         }).catch((error) => {
           console.log('error get topics list');
         })
+      },
+      showModal() {
+
+        if (this.$store.state.login.id) {
+          this.$store.commit('showWriter', true)
+        } else {
+          alert('请登录');
+        }
       }
     },
     created() {

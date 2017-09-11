@@ -23,6 +23,7 @@ import Body from './components/Body.vue'
 import Header from './components/Header.vue'
 import Writer from './components/Writer.vue'
 import routerConfig from './router.config.js'
+// import bus from './components/Bus'
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
@@ -45,6 +46,7 @@ const store = new Vuex.Store({
       avatar_url:'',
     },
     categories:[],
+    showWriter:false,
   },
   mutations:{
     login (state, payload) {
@@ -63,6 +65,10 @@ const store = new Vuex.Store({
     },
     categories(state, categories) {
       state.categories = categories;
+    },
+    showWriter(state, toggle)
+    {
+      state.showWriter = toggle
     }
   }
 })
@@ -71,6 +77,19 @@ const rm = new Vue({
     el: '#app',
     router: router,
     store,
+    data:{
+      showWriter:false
+    },
+    /*mounted(){
+      bus.$on('showWriter', () => {
+        console.log('get event');
+          this.showWriter = true
+
+        if (this.$store.state.login.id) {
+          this.showModel = true
+        }
+      })
+    },*/
     components:{
       'top-header': Header,
       'contents': Body,
@@ -84,7 +103,7 @@ axios.interceptors.response.use(function(response){
     let token
     // console.log('headers', response.headers, token = response.headers['token']);
     if (token = response.headers['token']) {
-      // console.log('token', token, token == 'Expiring');
+      // console.log('token', token, token == 'Refresh');
       if (token == 'Expiring') {
         window.axios.defaults.headers.common['Token'] = 'Refresh';
       } else if (token == 'Refresh') {

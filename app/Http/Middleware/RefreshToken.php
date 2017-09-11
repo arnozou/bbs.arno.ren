@@ -24,35 +24,38 @@ class RefreshToken
         if ($oldToken) {
           try {
             $payload = JWTAuth::getPayload();
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
             return $response;
           }
         } else {
           return $response;
         }
+        
         $exp = $payload->get('exp');
 
         if ($diff = Carbon::now()->diffInSeconds(Carbon::createFromTimestamp($exp), false)) {
-            if ($diff < 300) {
-                if ($request->header('Token') === 'Refresh') {
-                    JWTAuth::setBlacklistEnabled(false);
-                    $newToken = JWTAuth::refresh();
-                    JWTAuth::setBlacklistEnabled(true);
-                    $response->headers->set('Authorization', 'Bearer '.$newToken);
-                    $response->headers->set('Token', 'Refresh');
+          if ($diff < 300) {
+            if ($request->header('Token') === 'Refresh') {
+              JWTAuth::setBlacklistEnabled(false);
+              $newToken = JWTAuth::refresh();
+              JWTAuth::setBlacklistEnabled(true);
+              $response->headers->set('Authorization', 'Bearer '.$newToken);
+              $response->headers->set('Token', 'Refresh');
 
-                    $job = (new InvalidateToken($oldToken))
-                        ->onConnection('redis')
-                        ->delay(Carbon::now()->addMinutes(1));
-                    dispatch($job);
+              $job = (new InvalidateToken($oldToken))
+                ->onConnection('redis')
+                ->delay(Carbon::now()->addMinutes(3));
+              dispatch($job);
 
-                    // logger('发任务', ['time'=>Carbon::now()]);
-                } else {
-                    $response->header('Token', 'Expiring');
-                }
-                
+              // logger('发任务', ['time'=>Carbon::now()]);
+            } else {
+              $response->header('Token', 'Expiring');
             }
+              
+          }
         }
+
+        
 
         return $response;
     }

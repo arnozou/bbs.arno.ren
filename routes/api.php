@@ -31,6 +31,7 @@ $api->version(['0.1.0'], ['middleware' => 'jwt.refresh'], function($api) {
   $api->post('/login/wechat', 'App\Http\Controllers\Auth\LoginController@wechat');
   $api->post('/login/mobile', 'App\Http\Controllers\Auth\LoginController@mobile');
   $api->post('/login', 'App\Http\Controllers\Auth\LoginController@login');
+  $api->post('/relogin', 'App\Http\Controllers\Auth\LoginController@relogin');
   $api->post('/register', 'App\Http\Controllers\UserController@store');
   $api->post('/test', 'App\Http\Controllers\TestController@test');
   $api->post('/captcha/send/mobile', //['middleware' => 'api.throttle'],
@@ -58,7 +59,8 @@ $api->version(['0.1.0'], ['middleware' => 'jwt.refresh'], function($api) {
 $api->version(['0.1.0'], ['middleware' => 'api.auth'], function($api) {
   $api->group(['middleware' => 'jwt.refresh'], function($api) {
     $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
-
+    $api->post('/logout', 'App\Http\Controllers\Auth\LoginController@logout');
+    
   // $api->get('/users/edit', 'App\Http\Controllers\UserController@edit');
   $api->get('/users/test', 'App\Http\Controllers\UserController@edit1');
   $api->patch('/users', 'App\Http\Controllers\UserController@update');
@@ -93,3 +95,5 @@ $api->version(['0.1.0'], function($api) {
   });
   // $api->get('/users/{id}', 'App\Http\Controllers\UserController@show');
 });
+
+Route::any('/wechat', 'WechatController@serve');

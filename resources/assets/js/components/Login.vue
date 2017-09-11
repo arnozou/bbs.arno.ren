@@ -1,5 +1,5 @@
 <template>
-  <div class="row" v-title="登录">
+  <div class="row" v-title="'登录'">
     <div class="col-md-4 col-md-offset-4 ">
       <div class="login-block">
         <form class="form-horizontal" role="form" action="post">

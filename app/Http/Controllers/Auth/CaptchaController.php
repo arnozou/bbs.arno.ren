@@ -13,7 +13,6 @@ class CaptchaController extends ApiController
 
   public function sendToMobile(CaptchaSendMobile $request, AuthcodeInterface $authcodeRepository, AliyunSms $sms)
   {
-    
     $mobile = $request->input('mobile');
     $ip = $request->ip();
     $authcodes = $authcodeRepository->getRecords($mobile, $ip, 360);
@@ -47,4 +46,12 @@ class CaptchaController extends ApiController
       return $this->response->errorInternal();
     }
   }
+  
+  /*public function mnsSend()
+  {
+    $code = mt_rand(100000, 999999);
+    $mns = \Aliyun::createClient('mns');
+    $returnBool = $mns->SendSMSMessage(13424463876, 'SMS_89085006', ["code" => $code]);
+    logger($returnBool);
+  }*/
 }

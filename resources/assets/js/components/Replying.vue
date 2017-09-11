@@ -61,7 +61,7 @@
           return 
         }
 
-        axios.post('/topics/' + topic.id + '/replies', {
+        axios.post('/topics/' + this.topic.id + '/replies', {
           body: this.mdstr,
           })
       }
